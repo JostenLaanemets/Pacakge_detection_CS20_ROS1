@@ -1,0 +1,262 @@
+<launch>
+    <!-- Prefix added to tf frame IDs. It typically contains a trailing '_' unless empty. -->
+    <arg name="tf_prefix" default="" />
+    <!-- The FPS of the RGB and Depth cameras. Options are: 5, 7, 15, 30 -->
+    <arg name="fps" default="15" />
+    <!-- Generate a point cloud from depth data. Requires depth_enabled -->
+    <arg name="point_cloud_enabled" default="true" />
+
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++ CS30 CONFIG +++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- Enable or disable the depth camera -->
+    <arg name="CS30_depth_enabled" default="true" />
+    <!-- The resolution of the depth frame. Options are: 240P, 480P -->
+    <arg name="CS30_depth_resolution" default="480P" />
+    <!-- Enable or disable the ir camera -->
+    <arg name="CS30_ir_enabled" default="true" />
+    <!-- Enable or disable the color camera -->
+    <arg name="CS30_color_enabled" default="true" />
+    <!-- Resolution at which to run the color camera. Valid options: 1080P 540P 480P -->
+    <arg name="CS30_color_resolution" default="540P" />
+    <!-- True if mapped depth in color space should be enabled mapping depth resolution 480P rgb resolution 1080P 540P -->
+    <arg name="CS30_mapping_enabled" default="false" />
+    <!-- The Exposure of the Depth cameras. Valid value range: > 0, Use default setting if value=3000 -->
+    <arg name="CS30_exposure" default="3000" />
+    <!-- The Min Value of the Depth cameras Exposure Range. Valid value range: > 0, Use default setting if value=0 -->
+    <arg name="CS30_exposure_range_min" default="0" />
+    <!-- The Max Value of the Depth cameras Exposure Range. Valid value range: > 0, Use default setting if value=3000 -->
+    <arg name="CS30_exposure_range_max" default="3000" />
+    <!-- 0 to Disable Depth image Filter, 1 to Enable. Use default setting if value=-1 -->
+    <arg name="CS30_depth_image_filter" default="-1" />
+    <!-- AMPLITITUD value sett. Use default setting if value=-1. Min value 0 , Max value 100, Recommend value 6 -->
+    <arg name="CS30_filter_amplititud_value" default="-1" />
+    <!-- MEDIAN_01 value sett. Use default setting if value=-1. Min value 3, Max value 5, Recommend value 3 -->
+    <arg name="CS30_filter_median_value_01" default="-1" />
+    <!-- MEDIAN_02 value sett. Use default setting if value=-1. Min value 0, Max value 5, Recommend value 1 -->
+    <arg name="CS30_filter_median_value_02" default="-1" />
+    <!-- GAUSS_01 value sett. Use default setting if value=-1. Min value 3, Max value 5, Recommend value 1 -->
+    <arg name="CS30_filter_gauss_value_01" default="-1" />
+    <!-- GAUSS_02 value sett. Use default setting if value=-1. Min value 0, Max value 5, Recommend value 1 -->
+    <arg name="CS30_filter_gauss_value_02" default="-1" />
+    <!-- EDGE value sett. Use default setting if value=-1. Min value 20, Max value 200, Recommend value 50 -->
+    <arg name="CS30_filter_edge_value" default="-1" />
+    <!-- SPECKLE_01 value sett. Use default setting if value=-1. Min value 24, Max value 200, Recommend value 40 -->
+    <arg name="CS30_filter_speckle_value_01" default="-1" />
+    <!-- SPECKLE_02 value sett. Use default setting if value=-1. Min value 40, Max value 200 -->
+    <arg name="CS30_filter_speckle_value_02" default="-1" />
+    <!-- SOBEL value sett. Use default setting if value=-1. Min value 20, Max value 300, Recommend value 150 -->
+    <arg name="CS30_filter_sobel_value" default="-1" />
+    <!-- EDGE_MAD value sett. Use default setting if value=-1. Min value 5, Max value 100, Recommend value 15 -->
+    <arg name="CS30_filter_edge_mad_value" default="-1" />
+    <!-- OKADA value sett. Use default setting if value=-1. Min value 10, Max value 100, Recommend value 10 -->
+    <arg name="CS30_filter_okada_value" default="-1" />
+
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++ CS20 CONFIG +++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- Enable or disable the depth camera -->
+    <arg name="CS20_depth_enabled" default="true" />
+    <!-- The resolution of the depth frame. Options are: 240P, 480P. SINGLE not supported 480P  -->
+    <arg name="CS20_depth_resolution" default="240P" />
+    <!-- Enable or disable the ir camera -->
+    <arg name="CS20_ir_enabled" default="true" />
+    <!-- The Exposure of the Depth cameras. Valid value range: > 0, Use default setting if value=3000 -->
+    <arg name="CS20_exposure" default="3000" />
+    <!-- The Min Value of the Depth cameras Exposure Range. Valid value range: > 0, Use default setting if value=0 -->
+    <arg name="CS20_exposure_range_min" default="0" />
+    <!-- The Max Value of the Depth cameras Exposure Range. Valid value range: > 0, Use default setting if value=3000 -->
+    <arg name="CS20_exposure_range_max" default="3000" />
+    <!-- 0 to Disable Depth image Filter, 1 to Enable. Use default setting if value=-1 -->
+    <arg name="CS20_depth_image_filter" default="-1" />
+    <!-- AMPLITITUD value sett. Use default setting if value=-1. Min value 0 , Max value 100, Recommend value 6 -->
+    <arg name="CS20_filter_amplititud_value" default="-1" />
+    <!-- MEDIAN_01 value sett. Use default setting if value=-1. Min value 3, Max value 5, Recommend value 3 -->
+    <arg name="CS20_filter_median_value_01" default="-1" />
+    <!-- MEDIAN_02 value sett. Use default setting if value=-1. Min value 0, Max value 5, Recommend value 1 -->
+    <arg name="CS20_filter_median_value_02" default="-1" />
+    <!-- GAUSS_01 value sett. Use default setting if value=-1. Min value 3, Max value 5, Recommend value 1 -->
+    <arg name="CS20_filter_gauss_value_01" default="-1" />
+    <!-- GAUSS_02 value sett. Use default setting if value=-1. Min value 0, Max value 5, Recommend value 1 -->
+    <arg name="CS20_filter_gauss_value_02" default="-1" />
+    <!-- EDGE value sett. Use default setting if value=-1. Min value 20, Max value 200, Recommend value 50 -->
+    <arg name="CS20_filter_edge_value" default="-1" />
+    <!-- SPECKLE_01 value sett. Use default setting if value=-1. Min value 24, Max value 200, Recommend value 40 -->
+    <arg name="CS20_filter_speckle_value_01" default="-1" />
+    <!-- SPECKLE_02 value sett. Use default setting if value=-1. Min value 40, Max value 200 -->
+    <arg name="CS20_filter_speckle_value_02" default="-1" />
+    <!-- SOBEL value sett. Use default setting if value=-1. Min value 20, Max value 300, Recommend value 150 -->
+    <arg name="CS20_filter_sobel_value" default="-1" />
+    <!-- EDGE_MAD value sett. Use default setting if value=-1. Min value 5, Max value 100, Recommend value 15 -->
+    <arg name="CS20_filter_edge_mad_value" default="-1" />
+    <!-- OKADA value sett. Use default setting if value=-1. Min value 10, Max value 100, Recommend value 10 -->
+    <arg name="CS20_filter_okada_value" default="-1" />
+
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++ CS20-P CONFIG +++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- Enable or disable the depth camera -->
+    <arg name="CS20P_depth_enabled" default="true" />
+    <!-- The resolution of the depth frame. Options are: 240P  -->
+    <arg name="CS20P_depth_resolution" default="240P" />
+    <!-- Enable or disable the ir camera -->
+    <arg name="CS20P_ir_enabled" default="true" />
+    <!-- The Exposure of the Depth cameras. Valid value range: > 0, Use default setting if value=3000 -->
+    <arg name="CS20P_exposure" default="3000" />
+    <!-- The Min Value of the Depth cameras Exposure Range. Valid value range: > 0, Use default setting if value=0 -->
+    <arg name="CS20P_exposure_range_min" default="0" />
+    <!-- The Max Value of the Depth cameras Exposure Range. Valid value range: > 0, Use default setting if value=3000 -->
+    <arg name="CS20P_exposure_range_max" default="3000" />
+    <!-- 0 to Disable Depth image Filter, 1 to Enable. Use default setting if value=-1 -->
+    <arg name="CS20P_depth_image_filter" default="-1" />
+    <!-- AMPLITITUD value sett. Use default setting if value=-1. Min value 0 , Max value 100, Recommend value 6 -->
+    <arg name="CS20P_filter_amplititud_value" default="-1" />
+    <!-- MEDIAN_01 value sett. Use default setting if value=-1. Min value 3, Max value 5, Recommend value 3 -->
+    <arg name="CS20P_filter_median_value_01" default="-1" />
+    <!-- MEDIAN_02 value sett. Use default setting if value=-1. Min value 0, Max value 5, Recommend value 1 -->
+    <arg name="CS20P_filter_median_value_02" default="-1" />
+    <!-- GAUSS_01 value sett. Use default setting if value=-1. Min value 3, Max value 5, Recommend value 1 -->
+    <arg name="CS20P_filter_gauss_value_01" default="-1" />
+    <!-- GAUSS_02 value sett. Use default setting if value=-1. Min value 0, Max value 5, Recommend value 1 -->
+    <arg name="CS20P_filter_gauss_value_02" default="-1" />
+    <!-- EDGE value sett. Use default setting if value=-1. Min value 20, Max value 200, Recommend value 50 -->
+    <arg name="CS20P_filter_edge_value" default="-1" />
+    <!-- SPECKLE_01 value sett. Use default setting if value=-1. Min value 24, Max value 200, Recommend value 40 -->
+    <arg name="CS20P_filter_speckle_value_01" default="-1" />
+    <!-- SPECKLE_02 value sett. Use default setting if value=-1. Min value 40, Max value 200 -->
+    <arg name="CS20P_filter_speckle_value_02" default="-1" />
+    <!-- SOBEL value sett. Use default setting if value=-1. Min value 20, Max value 300, Recommend value 150 -->
+    <arg name="CS20P_filter_sobel_value" default="-1" />
+    <!-- EDGE_MAD value sett. Use default setting if value=-1. Min value 5, Max value 100, Recommend value 15 -->
+    <arg name="CS20P_filter_edge_mad_value" default="-1" />
+    <!-- OKADA value sett. Use default setting if value=-1. Min value 10, Max value 100, Recommend value 10 -->
+    <arg name="CS20P_filter_okada_value" default="-1" />
+
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++ CS40 CONFIG +++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- Enable or disable the depth camera -->
+    <arg name="CS40_depth_enabled" default="true" />
+    <!-- The resolution of the depth frame. Options are: 480P  -->
+    <arg name="CS40_depth_resolution" default="480P" />
+    <!-- Enable or disable the ir camera -->
+    <arg name="CS40_ir_enabled" default="true" />
+    <!-- The Exposure of the Depth cameras. Valid value range: > 0, Use default setting if value=3000 -->
+    <arg name="CS40_exposure" default="3000" />
+    <!-- The Min Value of the Depth cameras Exposure Range. Valid value range: > 0, Use default setting if value=0 -->
+    <arg name="CS40_exposure_range_min" default="0" />
+    <!-- The Max Value of the Depth cameras Exposure Range. Valid value range: > 0, Use default setting if value=3000 -->
+    <arg name="CS40_exposure_range_max" default="3000" />
+    <!-- 0 to Disable Depth image Filter, 1 to Enable. Use default setting if value=-1 -->
+    <arg name="CS40_depth_image_filter" default="-1" />
+    <!-- AMPLITITUD value sett. Use default setting if value=-1. Min value 0 , Max value 100, Recommend value 6 -->
+    <arg name="CS40_filter_amplititud_value" default="-1" />
+    <!-- MEDIAN_01 value sett. Use default setting if value=-1. Min value 3, Max value 5, Recommend value 3 -->
+    <arg name="CS40_filter_median_value_01" default="-1" />
+    <!-- MEDIAN_02 value sett. Use default setting if value=-1. Min value 0, Max value 5, Recommend value 1 -->
+    <arg name="CS40_filter_median_value_02" default="-1" />
+    <!-- GAUSS_01 value sett. Use default setting if value=-1. Min value 3, Max value 5, Recommend value 1 -->
+    <arg name="CS40_filter_gauss_value_01" default="-1" />
+    <!-- GAUSS_02 value sett. Use default setting if value=-1. Min value 0, Max value 5, Recommend value 1 -->
+    <arg name="CS40_filter_gauss_value_02" default="-1" />
+    <!-- EDGE value sett. Use default setting if value=-1. Min value 20, Max value 200, Recommend value 50 -->
+    <arg name="CS40_filter_edge_value" default="-1" />
+    <!-- SPECKLE_01 value sett. Use default setting if value=-1. Min value 24, Max value 200, Recommend value 40 -->
+    <arg name="CS40_filter_speckle_value_01" default="-1" />
+    <!-- SPECKLE_02 value sett. Use default setting if value=-1. Min value 40, Max value 200 -->
+    <arg name="CS40_filter_speckle_value_02" default="-1" />
+    <!-- SOBEL value sett. Use default setting if value=-1. Min value 20, Max value 300, Recommend value 150 -->
+    <arg name="CS40_filter_sobel_value" default="-1" />
+    <!-- EDGE_MAD value sett. Use default setting if value=-1. Min value 5, Max value 100, Recommend value 15 -->
+    <arg name="CS40_filter_edge_mad_value" default="-1" />
+    <!-- OKADA value sett. Use default setting if value=-1. Min value 10, Max value 100, Recommend value 10 -->
+    <arg name="CS40_filter_okada_value" default="-1" />
+
+
+    <node pkg="synexens_ros1" type="synexens_ros1_node" name="synexens_ros1" output="screen">
+        <param name="tf_prefix" type="string" value="$(arg tf_prefix)" />
+        <param name="fps" type="int" value="$(arg fps)" />
+        <param name="point_cloud_enabled" type="bool" value="$(arg point_cloud_enabled)" />
+
+        <!-- CS30 -->
+        <param name="CS30_depth_enabled" type="bool" value="$(arg CS30_depth_enabled)" />
+        <param name="CS30_depth_resolution" type="string" value="$(arg CS30_depth_resolution)" />
+        <param name="CS30_ir_enabled" type="bool" value="$(arg CS30_ir_enabled)" />
+        <param name="CS30_color_enabled" type="bool" value="$(arg CS30_color_enabled)" />
+        <param name="CS30_color_resolution" type="string" value="$(arg CS30_color_resolution)" />
+
+        <param name="CS30_mapping_enabled" type="bool" value="$(arg CS30_mapping_enabled)" />
+        <param name="CS30_exposure" type="int" value="$(arg CS30_exposure)" />
+        <param name="CS30_exposure_range_min" type="int" value="$(arg CS30_exposure_range_min)" />
+        <param name="CS30_exposure_range_max" type="int" value="$(arg CS30_exposure_range_max)" />
+        <!-- CS30 filter -->
+        <param name="CS30_depth_image_filter" type="int" value="$(arg CS30_depth_image_filter)" />
+        <param name="CS30_filter_amplititud_value" type="double" value="$(arg CS30_filter_amplititud_value)" />
+        <param name="CS30_filter_median_value_01" type="double" value="$(arg CS30_filter_median_value_01)" />
+        <param name="CS30_filter_median_value_02" type="double" value="$(arg CS30_filter_median_value_02)" />
+        <param name="CS30_filter_gauss_value_01" type="double" value="$(arg CS30_filter_gauss_value_01)" />
+        <param name="CS30_filter_gauss_value_02" type="double" value="$(arg CS30_filter_gauss_value_02)" />
+        <param name="CS30_filter_edge_value" type="double" value="$(arg CS30_filter_edge_value)" />
+        <param name="CS30_filter_speckle_value_01" type="double" value="$(arg CS30_filter_speckle_value_01)" />
+        <param name="CS30_filter_speckle_value_02" type="double" value="$(arg CS30_filter_speckle_value_02)" />
+        <param name="CS30_filter_sobel_value" type="double" value="$(arg CS30_filter_sobel_value)" />
+        <param name="CS30_filter_edge_mad_value" type="double" value="$(arg CS30_filter_edge_mad_value)" />
+        <param name="CS30_filter_okada_value" type="double" value="$(arg CS30_filter_okada_value)" />
+
+        <!-- CS20 -->
+        <param name="CS20_depth_enabled" type="bool" value="$(arg CS20_depth_enabled)" />
+        <param name="CS20_depth_resolution" type="string" value="$(arg CS20_depth_resolution)" />
+        <param name="CS20_ir_enabled" type="bool" value="$(arg CS20_ir_enabled)" />
+        <param name="CS20_exposure" type="int" value="$(arg CS20_exposure)" />
+        <param name="CS20_exposure_range_min" type="int" value="$(arg CS20_exposure_range_min)" />
+        <param name="CS20_exposure_range_max" type="int" value="$(arg CS20_exposure_range_max)" />
+        <!-- CS20 filter -->
+        <param name="CS20_depth_image_filter" type="int" value="$(arg CS20_depth_image_filter)" />
+        <param name="CS20_filter_amplititud_value" type="double" value="$(arg CS20_filter_amplititud_value)" />
+        <param name="CS20_filter_median_value_01" type="double" value="$(arg CS20_filter_median_value_01)" />
+        <param name="CS20_filter_median_value_02" type="double" value="$(arg CS20_filter_median_value_02)" />
+        <param name="CS20_filter_gauss_value_01" type="double" value="$(arg CS20_filter_gauss_value_01)" />
+        <param name="CS20_filter_gauss_value_02" type="double" value="$(arg CS20_filter_gauss_value_02)" />
+        <param name="CS20_filter_edge_value" type="double" value="$(arg CS20_filter_edge_value)" />
+        <param name="CS20_filter_speckle_value_01" type="double" value="$(arg CS20_filter_speckle_value_01)" />
+        <param name="CS20_filter_speckle_value_02" type="double" value="$(arg CS20_filter_speckle_value_02)" />
+        <param name="CS20_filter_sobel_value" type="double" value="$(arg CS20_filter_sobel_value)" />
+        <param name="CS20_filter_edge_mad_value" type="double" value="$(arg CS20_filter_edge_mad_value)" />
+        <param name="CS20_filter_okada_value" type="double" value="$(arg CS20_filter_okada_value)" />
+
+
+        <!-- CS20-P -->
+        <param name="CS20P_depth_enabled" type="bool" value="$(arg CS20P_depth_enabled)" />
+        <param name="CS20P_depth_resolution" type="string" value="$(arg CS20P_depth_resolution)" />
+        <param name="CS20P_ir_enabled" type="bool" value="$(arg CS20P_ir_enabled)" />
+        <param name="CS20P_exposure" type="int" value="$(arg CS20P_exposure)" />
+        <param name="CS20P_exposure_range_min" type="int" value="$(arg CS20P_exposure_range_min)" />
+        <param name="CS20P_exposure_range_max" type="int" value="$(arg CS20P_exposure_range_max)" />
+        <!-- CS20-P filter -->
+        <param name="CS20P_depth_image_filter" type="int" value="$(arg CS20P_depth_image_filter)" />
+        <param name="CS20P_filter_amplititud_value" type="double" value="$(arg CS20P_filter_amplititud_value)" />
+        <param name="CS20P_filter_median_value_01" type="double" value="$(arg CS20P_filter_median_value_01)" />
+        <param name="CS20P_filter_median_value_02" type="double" value="$(arg CS20P_filter_median_value_02)" />
+        <param name="CS20P_filter_gauss_value_01" type="double" value="$(arg CS20P_filter_gauss_value_01)" />
+        <param name="CS20P_filter_gauss_value_02" type="double" value="$(arg CS20P_filter_gauss_value_02)" />
+        <param name="CS20P_filter_edge_value" type="double" value="$(arg CS20P_filter_edge_value)" />
+        <param name="CS20P_filter_speckle_value_01" type="double" value="$(arg CS20P_filter_speckle_value_01)" />
+        <param name="CS20P_filter_speckle_value_02" type="double" value="$(arg CS20P_filter_speckle_value_02)" />
+        <param name="CS20P_filter_sobel_value" type="double" value="$(arg CS20P_filter_sobel_value)" />
+        <param name="CS20P_filter_edge_mad_value" type="double" value="$(arg CS20P_filter_edge_mad_value)" />
+        <param name="CS20P_filter_okada_value" type="double" value="$(arg CS20P_filter_okada_value)" />
+
+        <!-- CS40 -->
+        <param name="CS40_depth_enabled" type="bool" value="$(arg CS40_depth_enabled)" />
+        <param name="CS40_depth_resolution" type="string" value="$(arg CS40_depth_resolution)" />
+        <param name="CS40_ir_enabled" type="bool" value="$(arg CS40_ir_enabled)" />
+        <param name="CS40_exposure" type="int" value="$(arg CS40_exposure)" />
+        <param name="CS40_exposure_range_min" type="int" value="$(arg CS40_exposure_range_min)" />
+        <param name="CS40_exposure_range_max" type="int" value="$(arg CS40_exposure_range_max)" />
+        <!-- CS40 filter -->
+        <param name="CS40_depth_image_filter" type="int" value="$(arg CS40_depth_image_filter)" />
+        <param name="CS40_filter_amplititud_value" type="double" value="$(arg CS40_filter_amplititud_value)" />
+        <param name="CS40_filter_median_value_01" type="double" value="$(arg CS40_filter_median_value_01)" />
+        <param name="CS40_filter_median_value_02" type="double" value="$(arg CS40_filter_median_value_02)" />
+        <param name="CS40_filter_gauss_value_01" type="double" value="$(arg CS40_filter_gauss_value_01)" />
+        <param name="CS40_filter_gauss_value_02" type="double" value="$(arg CS40_filter_gauss_value_02)" />
+        <param name="CS40_filter_edge_value" type="double" value="$(arg CS40_filter_edge_value)" />
+        <param name="CS40_filter_speckle_value_01" type="double" value="$(arg CS40_filter_speckle_value_01)" />
+        <param name="CS40_filter_speckle_value_02" type="double" value="$(arg CS40_filter_speckle_value_02)" />
+        <param name="CS40_filter_sobel_value" type="double" value="$(arg CS40_filter_sobel_value)" />
+        <param name="CS40_filter_edge_mad_value" type="double" value="$(arg CS40_filter_edge_mad_value)" />
+        <param name="CS40_filter_okada_value" type="double" value="$(arg CS40_filter_okada_value)" />
+    </node>
+</launch>
